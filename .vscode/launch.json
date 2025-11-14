@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/afalcon/dev/odoo/odoo16/src/odoo-bin",
+            "python": "/home/afalcon/.virtualenvs/odoo16/bin/python",
+            "args": [
+                "--addons-path=/home/afalcon/dev/odoo/odoo16/src/addons,/home/afalcon/dev/odoo/odoo16/src/odoo/addons,/home/afalcon/dev/odoo/odoo16/addons-custom/odoo_prometheus_exporter/local,/home/afalcon/dev/odoo/odoo16/addons-extra", 
+                "-d", "odoo16odoo_prometheus_exporter", 
+//                "--logfile", "/home/afalcon/dev/odoo/odoo16/addons-custom/odoo_prometheus_exporter/logs/odoo_prometheus_exporter.log",
+                "--data-dir", "/home/afalcon/dev/odoo/odoo16/addons-custom/odoo_prometheus_exporter/filestore",
+                "-u", "odoo_prometheus_exporter", 
+                "--dev", "xml", 
+                "--limit-time-cpu=9999", "--limit-time-real=9999"
+            ],
+            "console": "integratedTerminal"
+        }
+    ]
+}
