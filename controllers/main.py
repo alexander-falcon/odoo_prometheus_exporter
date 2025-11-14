@@ -33,28 +33,30 @@ class PrometheusMetricsController(http.Controller):
         metrics.append(f'# TYPE odoo_response_time_seconds gauge')
         metrics.append(f'odoo_response_time_seconds {time.process_time()}')
 
-        # Correos no enviados
+        # Correos fallidos (counter)
         failed_mails = request.env['mail.mail'].sudo().search_count([('state', 'in', ['exception','failed'])])
-        metrics.append('# HELP odoo_mail_failed_total Total de correos que no pudieron enviarse')
-        metrics.append('# TYPE odoo_mail_failed_total gauge')
+        metrics.append('# HELP odoo_mail_failed_total Total de correos fallidos detectados')
+        metrics.append('# TYPE odoo_mail_failed_total counter')
         metrics.append(f'odoo_mail_failed_total {failed_mails}')
 
-        # Errores y warnings en logs
+        # Errores en logs (counter)
         errors = request.env['ir.logging'].sudo().search_count([('level','=','ERROR')])
-        warnings = request.env['ir.logging'].sudo().search_count([('level','=','WARNING')])
-        metrics.append('# HELP odoo_log_errors_total Número de errores en logs')
-        metrics.append('# TYPE odoo_log_errors_total gauge')
+        metrics.append('# HELP odoo_log_errors_total Total de errores en logs')
+        metrics.append('# TYPE odoo_log_errors_total counter')
         metrics.append(f'odoo_log_errors_total {errors}')
-        metrics.append('# HELP odoo_log_warnings_total Número de warnings en logs')
-        metrics.append('# TYPE odoo_log_warnings_total gauge')
+
+        # Warnings en logs (counter)
+        warnings = request.env['ir.logging'].sudo().search_count([('level','=','WARNING')])
+        metrics.append('# HELP odoo_log_warnings_total Total de warnings en logs')
+        metrics.append('# TYPE odoo_log_warnings_total counter')
         metrics.append(f'odoo_log_warnings_total {warnings}')
 
-        # Nuevos candidatos
+        # Applicants (counter)
         applicants = request.env['hr.applicant'].sudo().search_count([])
         metrics.append('# HELP odoo_applicants_total Total de candidatos registrados')
-        metrics.append('# TYPE odoo_applicants_total gauge')
+        metrics.append('# TYPE odoo_applicants_total counter')
         metrics.append(f'odoo_applicants_total {applicants}')
-
+        
         # Construir respuesta
         body = "\n".join(metrics)
         return Response(body, content_type='text/plain; charset=UTF-8')
